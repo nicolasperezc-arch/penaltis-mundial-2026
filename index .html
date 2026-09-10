@@ -1,0 +1,2508 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,
+initial-scale=1.0,
+maximum-scale=1.0,
+user-scalable=no">
+
+<title>Penaltis Mundial 2026</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+-webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+margin:0;
+width:100%;
+height:100%;
+overflow:hidden;
+font-family:Arial,sans-serif;
+background:#06121b;
+color:white;
+}
+
+body{
+touch-action:manipulation;
+}
+
+button{
+font-family:Arial,sans-serif;
+cursor:pointer;
+touch-action:manipulation;
+}
+
+#app{
+width:100%;
+height:100vh;
+display:flex;
+flex-direction:column;
+}
+
+/* ================= CABECERA ================= */
+
+header{
+height:62px;
+flex:none;
+position:relative;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+background:
+linear-gradient(
+90deg,
+#006847 0%,
+#075c72 30%,
+#101b35 50%,
+#075c72 70%,
+#d52b1e 100%
+);
+
+border-bottom:2px solid white;
+}
+
+.title{
+text-align:center;
+}
+
+.titleMain{
+font-size:19px;
+font-weight:900;
+letter-spacing:1px;
+}
+
+.titleSub{
+margin-top:3px;
+font-size:8px;
+font-weight:bold;
+}
+
+.clock{
+position:absolute;
+left:10px;
+top:9px;
+padding:7px 11px;
+border-radius:20px;
+background:rgba(2,12,28,.88);
+font-size:11px;
+font-weight:bold;
+}
+
+.sound{
+position:absolute;
+right:10px;
+top:9px;
+padding:7px 10px;
+border-radius:20px;
+background:rgba(2,12,28,.88);
+font-size:15px;
+}
+
+/* ================= MARCADOR ================= */
+
+#score{
+height:36px;
+flex:none;
+
+display:flex;
+justify-content:space-around;
+align-items:center;
+
+background:#101d27;
+
+font-size:10px;
+font-weight:bold;
+}
+
+.number{
+font-size:15px;
+}
+
+/* ================= MARCADOR EQUIPOS ================= */
+
+#topScore{
+height:49px;
+flex:none;
+
+display:flex;
+justify-content:space-around;
+align-items:center;
+
+background:
+linear-gradient(
+90deg,
+#06192a,
+#0a3445,
+#06192a
+);
+
+border-bottom:1px solid rgba(255,255,255,.35);
+}
+
+.team{
+display:flex;
+align-items:center;
+gap:5px;
+
+min-width:42%;
+
+font-size:8px;
+font-weight:900;
+}
+
+.team.right{
+justify-content:flex-end;
+}
+
+.teamFlag{
+font-size:20px;
+}
+
+.dots{
+display:flex;
+gap:3px;
+}
+
+.dot{
+width:9px;
+height:9px;
+
+border-radius:50%;
+
+border:1px solid white;
+
+background:transparent;
+
+transition:.2s;
+}
+
+.dot.goal{
+background:#20d66b;
+box-shadow:0 0 7px #20d66b;
+}
+
+.dot.miss{
+background:#e34848;
+}
+
+.teamScore{
+font-size:17px;
+}
+
+.centerScore{
+text-align:center;
+font-size:7px;
+font-weight:bold;
+opacity:.9;
+}
+
+.centerScore strong{
+display:block;
+font-size:11px;
+}
+
+/* ================= CAMPO ================= */
+
+#game{
+position:relative;
+flex:1;
+overflow:hidden;
+
+background:
+linear-gradient(
+#071e38 0%,
+#17677d 35%,
+#1c9b45 60%,
+#127c38 100%
+);
+}
+
+/* ================= ESTADIO ================= */
+
+#crowd{
+position:absolute;
+left:0;
+right:0;
+top:7%;
+height:32%;
+
+background:
+radial-gradient(
+circle,
+rgba(255,255,255,.8) 1px,
+transparent 2px
+),
+radial-gradient(
+circle,
+rgba(241,198,66,.8) 1px,
+transparent 2px
+),
+radial-gradient(
+circle,
+rgba(210,65,65,.8) 1px,
+transparent 2px
+),
+#172733;
+
+background-size:
+12px 12px,
+16px 16px,
+19px 19px,
+auto;
+
+opacity:.95;
+}
+
+.stadiumGlow{
+position:absolute;
+
+width:130px;
+height:25px;
+
+top:2%;
+
+background:rgba(255,255,255,.8);
+
+filter:blur(15px);
+
+border-radius:50%;
+}
+
+.glow1{left:4%}
+.glow2{left:43%}
+.glow3{right:4%}
+
+/* ================= BANDERAS ================= */
+
+.flag{
+position:absolute;
+
+top:8%;
+
+width:64px;
+height:38px;
+
+border:1px solid rgba(255,255,255,.7);
+
+border-radius:2px;
+
+box-shadow:
+0 3px 7px rgba(0,0,0,.45);
+
+opacity:.95;
+
+overflow:hidden;
+
+z-index:7;
+}
+
+/* MÉXICO */
+
+.flagMX{
+left:25%;
+
+background:
+linear-gradient(
+90deg,
+#006847 0 33.33%,
+#fff 33.33% 66.66%,
+#ce1126 66.66% 100%
+);
+}
+
+.flagMX:after{
+content:"";
+
+position:absolute;
+
+left:50%;
+top:50%;
+
+width:10px;
+height:10px;
+
+transform:
+translate(-50%,-50%);
+
+border-radius:50%;
+
+background:#8b6b32;
+}
+
+/* ESTADOS UNIDOS */
+
+.flagUS{
+left:calc(50% - 32px);
+
+background:
+repeating-linear-gradient(
+to bottom,
+#b22234 0 3px,
+#fff 3px 6px
+);
+}
+
+.flagUS:before{
+content:"";
+
+position:absolute;
+
+left:0;
+top:0;
+
+width:27px;
+height:20px;
+
+background:
+radial-gradient(
+circle,
+#fff 1px,
+transparent 1.5px
+),
+#3c3b6e;
+
+background-size:6px 6px;
+}
+
+/* CANADÁ */
+
+.flagCA{
+right:25%;
+
+background:
+linear-gradient(
+90deg,
+#d52b1e 0 25%,
+#fff 25% 75%,
+#d52b1e 75% 100%
+);
+}
+
+.flagCA:after{
+content:"🍁";
+
+position:absolute;
+
+left:50%;
+top:50%;
+
+transform:
+translate(-50%,-50%);
+
+font-size:19px;
+line-height:1;
+}
+
+/* ================= CÉSPED ================= */
+
+#grass{
+position:absolute;
+
+left:0;
+right:0;
+bottom:0;
+top:38%;
+
+background:
+repeating-linear-gradient(
+90deg,
+#188f40 0 65px,
+#14813a 65px 130px
+);
+}
+
+/* ================= CANCHA ================= */
+
+.fieldLine{
+position:absolute;
+
+border:2px solid rgba(255,255,255,.45);
+
+pointer-events:none;
+}
+
+.penaltyBox{
+left:17%;
+width:66%;
+top:49%;
+height:32%;
+
+border-top:0;
+}
+
+.penaltyArc{
+position:absolute;
+
+left:50%;
+top:75%;
+
+width:100px;
+height:50px;
+
+transform:translateX(-50%);
+
+border:
+2px solid rgba(255,255,255,.35);
+
+border-bottom:0;
+
+border-radius:
+100px 100px 0 0;
+}
+
+/* ================= PORTERÍA ================= */
+
+#goal{
+position:absolute;
+
+z-index:5;
+
+left:5%;
+top:13%;
+
+width:90%;
+height:35%;
+
+border:6px solid white;
+
+background:
+repeating-linear-gradient(
+0deg,
+transparent 0 18px,
+rgba(255,255,255,.27) 19px 20px
+),
+repeating-linear-gradient(
+90deg,
+transparent 0 21px,
+rgba(255,255,255,.27) 22px 23px
+);
+
+box-shadow:
+inset 0 0 30px rgba(0,0,0,.45),
+0 8px 20px rgba(0,0,0,.55);
+}
+
+/* ================= EFECTO DETRÁS DE LA PORTERÍA ================= */
+
+#goal:before{
+content:"";
+
+position:absolute;
+
+left:-2px;
+right:-2px;
+top:-10px;
+
+height:10px;
+
+background:
+linear-gradient(
+90deg,
+rgba(255,255,255,.08),
+rgba(255,255,255,.35),
+rgba(255,255,255,.08)
+);
+
+filter:blur(2px);
+}
+
+/* ================= ARQUERO ================= */
+
+#keeper{
+position:absolute;
+
+z-index:15;
+
+left:50%;
+top:31%;
+
+width:105px;
+height:105px;
+
+transform:
+translate(-50%,-50%);
+
+transition:
+left .52s cubic-bezier(.2,.8,.2,1),
+transform .52s cubic-bezier(.2,.8,.2,1);
+}
+
+#keeperEmoji{
+width:100%;
+height:100%;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+font-size:70px;
+
+filter:
+drop-shadow(
+0 8px 5px
+rgba(0,0,0,.55)
+);
+}
+
+#keeperLabel{
+position:absolute;
+
+left:50%;
+bottom:-3px;
+
+transform:translateX(-50%);
+
+white-space:nowrap;
+
+padding:4px 10px;
+
+border-radius:8px;
+
+background:rgba(0,0,0,.78);
+
+font-size:10px;
+font-weight:900;
+}
+
+#keeper.left{
+transform:
+translate(-50%,-50%)
+rotate(-18deg)
+scale(1.18);
+}
+
+#keeper.center{
+transform:
+translate(-50%,-50%)
+scale(1.22);
+}
+
+#keeper.right{
+transform:
+translate(-50%,-50%)
+rotate(18deg)
+scale(1.18);
+}
+
+/* ================= BALÓN ================= */
+
+#ball{
+position:absolute;
+
+z-index:20;
+
+left:50%;
+bottom:22%;
+
+width:56px;
+height:56px;
+
+transform:
+translateX(-50%)
+rotate(0deg);
+
+border-radius:50%;
+
+background:white;
+
+box-shadow:
+0 9px 16px rgba(0,0,0,.65);
+
+/* NUEVO: transición visual */
+will-change:
+left,
+bottom,
+transform;
+
+}
+
+/* balón */
+
+#ball:after{
+content:"⚽";
+
+position:absolute;
+
+left:50%;
+top:50%;
+
+transform:
+translate(-50%,-50%);
+
+font-size:46px;
+}
+
+/* ================= RASTRO DEL BALÓN ================= */
+
+#ball:before{
+content:"";
+
+position:absolute;
+
+left:50%;
+top:50%;
+
+width:14px;
+height:65px;
+
+transform:
+translate(-50%,-50%)
+rotate(0deg);
+
+border-radius:50%;
+
+background:
+linear-gradient(
+to bottom,
+rgba(255,255,255,0),
+rgba(255,255,255,.22),
+rgba(255,255,255,0)
+);
+
+filter:blur(5px);
+
+opacity:0;
+
+pointer-events:none;
+}
+
+/* activar efecto durante el tiro */
+
+#ball.shooting:before{
+opacity:.85;
+animation:
+ballTrail .28s linear infinite;
+}
+
+@keyframes ballTrail{
+
+0%{
+opacity:.15;
+transform:
+translate(-50%,-50%)
+scale(.6)
+rotate(0deg);
+}
+
+50%{
+opacity:.85;
+transform:
+translate(-50%,-50%)
+scale(1)
+rotate(180deg);
+}
+
+100%{
+opacity:.1;
+transform:
+translate(-50%,-50%)
+scale(.6)
+rotate(360deg);
+}
+
+}
+
+/* ================= INFORMACIÓN ================= */
+
+#matchInfo{
+position:absolute;
+
+z-index:35;
+
+left:50%;
+top:6px;
+
+transform:translateX(-50%);
+
+padding:7px 15px;
+
+border-radius:18px;
+
+background:
+rgba(2,15,28,.92);
+
+border:
+1px solid rgba(255,255,255,.4);
+
+font-size:10px;
+font-weight:900;
+
+white-space:nowrap;
+}
+
+#message{
+position:absolute;
+
+z-index:35;
+
+left:50%;
+top:51%;
+
+transform:translateX(-50%);
+
+min-width:220px;
+
+padding:9px 13px;
+
+border-radius:15px;
+
+background:
+rgba(2,13,23,.93);
+
+border:
+1px solid rgba(255,255,255,.45);
+
+text-align:center;
+
+font-size:12px;
+font-weight:900;
+
+box-shadow:
+0 5px 12px rgba(0,0,0,.3);
+}
+
+/* ================= CONTROLES ================= */
+
+.panel{
+position:absolute;
+
+z-index:40;
+
+left:50%;
+bottom:5%;
+
+transform:translateX(-50%);
+
+width:78%;
+
+padding:8px;
+
+border-radius:16px;
+
+background:
+rgba(2,16,29,.96);
+
+border:
+1px solid rgba(255,255,255,.5);
+
+box-shadow:
+0 9px 20px rgba(0,0,0,.55);
+}
+
+.panelTitle{
+text-align:center;
+
+margin-bottom:6px;
+
+font-size:12px;
+font-weight:900;
+}
+
+.buttons{
+display:flex;
+
+gap:7px;
+}
+
+.control{
+flex:1;
+
+min-height:46px;
+
+border:
+1px solid #56b8cc;
+
+border-radius:10px;
+
+background:
+linear-gradient(
+#17435a,
+#071b2b
+);
+
+color:white;
+
+font-size:9px;
+
+font-weight:900;
+
+transition:
+transform .08s,
+background .15s;
+}
+
+.control:active{
+transform:scale(.91);
+}
+
+.hidden{
+display:none !important;
+}
+
+/* ================= NUEVO ================= */
+
+#newGame{
+position:absolute;
+
+z-index:50;
+
+right:7px;
+top:7px;
+
+width:auto;
+
+min-height:auto;
+
+padding:6px 9px;
+
+border-radius:9px;
+
+border:1px solid rgba(255,255,255,.5);
+
+background:
+rgba(2,15,27,.9);
+
+color:white;
+
+font-size:8px;
+font-weight:bold;
+}
+
+/* ================= FINAL ================= */
+
+#finalScreen{
+position:absolute;
+
+z-index:100;
+
+inset:0;
+
+display:none;
+
+align-items:center;
+justify-content:center;
+
+padding:20px;
+
+background:
+rgba(1,8,15,.97);
+
+text-align:center;
+}
+
+.finalCard{
+width:min(380px,91vw);
+
+padding:25px;
+
+border-radius:23px;
+
+background:
+linear-gradient(
+145deg,
+#10384d,
+#061520
+);
+
+border:
+2px solid rgba(255,255,255,.5);
+
+box-shadow:
+0 15px 40px rgba(0,0,0,.7);
+}
+
+.finalIcon{
+font-size:70px;
+
+margin-bottom:8px;
+
+filter:
+drop-shadow(
+0 8px 10px
+rgba(0,0,0,.6)
+);
+}
+
+.finalCard h1{
+margin-top:0;
+
+font-size:27px;
+}
+
+.finalResult{
+margin:11px 0;
+
+font-size:14px;
+font-weight:bold;
+line-height:1.4;
+}
+
+.finalCard button{
+width:100%;
+
+min-height:46px;
+
+border:0;
+
+border-radius:11px;
+
+background:#e1b84c;
+
+color:#111;
+
+font-size:14px;
+
+font-weight:900;
+}
+
+/* ================= MÓVIL ================= */
+
+@media(max-width:700px){
+
+header{
+height:56px;
+}
+
+.titleMain{
+font-size:14px;
+}
+
+.titleSub{
+font-size:6px;
+}
+
+.clock{
+left:4px;
+top:7px;
+
+padding:5px 7px;
+
+font-size:8px;
+}
+
+.sound{
+right:4px;
+top:7px;
+
+padding:5px 7px;
+
+font-size:11px;
+}
+
+#score{
+height:32px;
+
+font-size:8px;
+}
+
+.number{
+font-size:13px;
+}
+
+#topScore{
+height:44px;
+}
+
+.team{
+font-size:7px;
+}
+
+.teamFlag{
+font-size:16px;
+}
+
+.dot{
+width:7px;
+height:7px;
+}
+
+.teamScore{
+font-size:14px;
+}
+
+.centerScore{
+font-size:5px;
+}
+
+.centerScore strong{
+font-size:9px;
+}
+
+/* BANDERAS ARRIBA DEL ARCO */
+
+.flag{
+width:47px;
+height:28px;
+
+top:8%;
+}
+
+.flagMX{
+left:23%;
+}
+
+.flagUS{
+left:calc(50% - 23px);
+}
+
+.flagCA{
+right:23%;
+}
+
+#goal{
+left:4%;
+width:92%;
+top:14%;
+height:34%;
+}
+
+#keeper{
+top:31%;
+width:90px;
+height:90px;
+}
+
+#keeperEmoji{
+font-size:59px;
+}
+
+#keeperLabel{
+font-size:8px;
+}
+
+#ball{
+bottom:22%;
+
+width:48px;
+height:48px;
+}
+
+#ball:after{
+font-size:39px;
+}
+
+#ball:before{
+width:11px;
+height:52px;
+}
+
+#message{
+top:52%;
+
+min-width:190px;
+
+font-size:10px;
+}
+
+.panel{
+width:82%;
+bottom:4%;
+padding:6px;
+}
+
+.panelTitle{
+font-size:9px;
+}
+
+.control{
+min-height:40px;
+font-size:7px;
+}
+
+#matchInfo{
+top:4px;
+
+padding:5px 9px;
+
+font-size:8px;
+}
+
+#newGame{
+top:4px;
+
+padding:4px 6px;
+
+font-size:7px;
+}
+
+.finalIcon{
+font-size:55px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+<header>
+
+<div class="clock">
+◷ 20:26
+</div>
+
+<div class="title">
+
+<div class="titleMain">
+🏆 FIFA WORLD CUP 2026
+</div>
+
+<div class="titleSub">
+MÉXICO · CANADÁ · ESTADOS UNIDOS
+</div>
+
+</div>
+
+<div class="sound">
+🔊
+</div>
+
+</header>
+
+
+<div id="score">
+
+<span>
+⚽ Goles:
+<b class="number" id="goals">0</b>
+</span>
+
+<span>
+🧤 Atajadas:
+<b class="number" id="saves">0</b>
+</span>
+
+<span>
+🎯 Turno:
+<b class="number">
+<span id="round">0</span>/8
+</b>
+</span>
+
+</div>
+
+
+<div id="topScore">
+
+<div class="team">
+
+<span class="teamFlag">
+🇨🇴
+</span>
+
+<span>
+TÚ
+</span>
+
+<div class="dots">
+
+<span class="dot" id="p1"></span>
+<span class="dot" id="p2"></span>
+<span class="dot" id="p3"></span>
+<span class="dot" id="p4"></span>
+
+</div>
+
+<strong
+class="teamScore"
+id="playerScore">
+0
+</strong>
+
+</div>
+
+
+<div class="centerScore">
+
+FIFA WORLD CUP
+
+<strong>
+2026
+</strong>
+
+</div>
+
+
+<div class="team right">
+
+<strong
+class="teamScore"
+id="opponentScore">
+0
+</strong>
+
+<div class="dots">
+
+<span class="dot" id="o1"></span>
+<span class="dot" id="o2"></span>
+<span class="dot" id="o3"></span>
+<span class="dot" id="o4"></span>
+
+</div>
+
+<span id="opponentShort">
+MEX
+</span>
+
+<span
+class="teamFlag"
+id="opponentFlag">
+🇲🇽
+</span>
+
+</div>
+
+</div>
+
+
+<div id="game">
+
+
+<div id="crowd"></div>
+
+<div class="stadiumGlow glow1"></div>
+<div class="stadiumGlow glow2"></div>
+<div class="stadiumGlow glow3"></div>
+
+
+<!-- ================= BANDERAS ================= -->
+
+<div class="flag flagMX"></div>
+<div class="flag flagUS"></div>
+<div class="flag flagCA"></div>
+
+
+<div id="grass"></div>
+
+<div class="fieldLine penaltyBox"></div>
+
+<div class="penaltyArc"></div>
+
+
+<div id="matchInfo">
+🇲🇽 MÉXICO
+</div>
+
+
+<button
+id="newGame"
+onclick="resetGame()">
+
+🔄 NUEVO
+
+</button>
+
+
+<div id="goal"></div>
+
+
+<!-- ================= PORTERO ================= -->
+
+<div id="keeper">
+
+<div id="keeperEmoji">
+🐆
+</div>
+
+<div id="keeperLabel">
+Zayu
+</div>
+
+</div>
+
+
+<!-- ================= BALÓN ================= -->
+
+<div id="ball"></div>
+
+
+<div id="message">
+⚽ ¡TIRA EL PENALTI!
+</div>
+
+
+<!-- ================= PATEAR ================= -->
+
+<div
+class="panel"
+id="shootPanel">
+
+<div class="panelTitle">
+⚽ PATEAR
+</div>
+
+<div class="buttons">
+
+<button
+class="control"
+onclick="shoot(0)">
+
+←<br>
+IZQUIERDA
+
+</button>
+
+<button
+class="control"
+onclick="shoot(1)">
+
+↑<br>
+CENTRO
+
+</button>
+
+<button
+class="control"
+onclick="shoot(2)">
+
+→<br>
+DERECHA
+
+</button>
+
+</div>
+
+</div>
+
+
+<!-- ================= ATAJAR ================= -->
+
+<div
+class="panel hidden"
+id="defendPanel">
+
+<div class="panelTitle">
+🧤 PORTERO
+</div>
+
+<div class="buttons">
+
+<button
+class="control"
+onclick="defend(0)">
+
+←<br>
+IZQUIERDA
+
+</button>
+
+<button
+class="control"
+onclick="defend(1)">
+
+↑<br>
+CENTRO
+
+</button>
+
+<button
+class="control"
+onclick="defend(2)">
+
+→<br>
+DERECHA
+
+</button>
+
+</div>
+
+</div>
+
+
+<!-- ================= FINAL ================= -->
+
+<div id="finalScreen">
+
+<div class="finalCard">
+
+<div
+class="finalIcon"
+id="finalIcon">
+🏆
+</div>
+
+<h1 id="finalTitle">
+TORNEO TERMINADO
+</h1>
+
+<div
+class="finalResult"
+id="finalText">
+</div>
+
+<div
+class="finalResult"
+id="finalGames">
+</div>
+
+<button onclick="resetGame()">
+🔄 JUGAR DE NUEVO
+</button>
+
+</div>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   PARTIDOS
+===================================================== */
+
+const matches=[
+
+{
+name:"MÉXICO",
+short:"MEX",
+flag:"🇲🇽",
+mascot:"🐆",
+mascotName:"Zayu"
+},
+
+{
+name:"CANADÁ",
+short:"CAN",
+flag:"🇨🇦",
+mascot:"🫎",
+mascotName:"Maple"
+},
+
+{
+name:"ESTADOS UNIDOS",
+short:"USA",
+flag:"🇺🇸",
+mascot:"🦅",
+mascotName:"Clutch"
+}
+
+];
+
+
+/* =====================================================
+   VARIABLES
+===================================================== */
+
+let matchIndex=0;
+
+let round=0;
+
+let playerGoals=0;
+
+let opponentGoals=0;
+
+let totalGoals=0;
+
+let totalSaves=0;
+
+let busy=false;
+
+let results=[];
+
+
+/* =====================================================
+   ELEMENTOS
+===================================================== */
+
+const keeper=
+document.getElementById("keeper");
+
+const keeperEmoji=
+document.getElementById("keeperEmoji");
+
+const keeperLabel=
+document.getElementById("keeperLabel");
+
+const ball=
+document.getElementById("ball");
+
+const message=
+document.getElementById("message");
+
+const shootPanel=
+document.getElementById("shootPanel");
+
+const defendPanel=
+document.getElementById("defendPanel");
+
+
+/* =====================================================
+   POSICIONES
+===================================================== */
+
+function lanePercent(lane){
+
+if(lane===0)
+return "28%";
+
+if(lane===1)
+return "50%";
+
+return "72%";
+
+}
+
+
+/* =====================================================
+   ACTUALIZAR PARTIDO
+===================================================== */
+
+function updateMatch(){
+
+const m=matches[matchIndex];
+
+document.getElementById(
+"matchInfo"
+).textContent=
+m.flag+" "+m.name;
+
+document.getElementById(
+"opponentFlag"
+).textContent=
+m.flag;
+
+document.getElementById(
+"opponentShort"
+).textContent=
+m.short;
+
+}
+
+
+/* =====================================================
+   MARCADOR
+===================================================== */
+
+function updateScore(){
+
+document.getElementById(
+"goals"
+).textContent=
+totalGoals;
+
+document.getElementById(
+"saves"
+).textContent=
+totalSaves;
+
+document.getElementById(
+"round"
+).textContent=
+round;
+
+document.getElementById(
+"playerScore"
+).textContent=
+playerGoals;
+
+document.getElementById(
+"opponentScore"
+).textContent=
+opponentGoals;
+
+}
+
+
+/* =====================================================
+   RESET POSICIONES
+===================================================== */
+
+function resetPositions(){
+
+ball.classList.remove("shooting");
+
+ball.style.left="50%";
+
+ball.style.bottom="22%";
+
+ball.style.transform=
+"translateX(-50%) rotate(0deg) scale(1)";
+
+keeper.style.left="50%";
+
+keeper.className="";
+
+}
+
+
+/* =====================================================
+   TURNO
+===================================================== */
+
+function updateTurn(){
+
+if(round>=8){
+
+finishMatch();
+
+return;
+
+}
+
+
+if(round%2===0){
+
+shootPanel.classList.remove(
+"hidden"
+);
+
+defendPanel.classList.add(
+"hidden"
+);
+
+const m=
+matches[matchIndex];
+
+keeperEmoji.textContent=
+m.mascot;
+
+keeperLabel.textContent=
+m.mascotName;
+
+message.textContent=
+"⚽ ¡TIRA EL PENALTI!";
+
+}
+
+else{
+
+shootPanel.classList.add(
+"hidden"
+);
+
+defendPanel.classList.remove(
+"hidden"
+);
+
+keeperEmoji.textContent=
+"👨🏻";
+
+keeperLabel.textContent=
+"PORTERO";
+
+message.textContent=
+"🧤 ¡PREPÁRATE PARA ATAJAR!";
+
+}
+
+}
+
+
+/* =====================================================
+   MOVER ARQUERO
+===================================================== */
+
+function moveKeeper(direction){
+
+keeper.style.left=
+lanePercent(direction);
+
+keeper.className="";
+
+if(direction===0){
+
+keeper.classList.add("left");
+
+}
+
+else if(direction===1){
+
+keeper.classList.add("center");
+
+}
+
+else{
+
+keeper.classList.add("right");
+
+}
+
+}
+
+
+/* =====================================================
+   CREAR JUGADA
+===================================================== */
+
+function makePlay(
+playerDirection,
+playerIsShooting
+){
+
+const isGoal=
+Math.random()<0.5;
+
+let shotDirection;
+
+let keeperDirection;
+
+
+if(playerIsShooting){
+
+shotDirection=
+playerDirection;
+
+
+if(isGoal){
+
+const otherDirections=
+[0,1,2].filter(
+d=>d!==shotDirection
+);
+
+keeperDirection=
+otherDirections[
+Math.floor(
+Math.random()*
+otherDirections.length
+)
+];
+
+}
+
+else{
+
+keeperDirection=
+shotDirection;
+
+}
+
+}
+
+else{
+
+keeperDirection=
+playerDirection;
+
+
+if(isGoal){
+
+const otherDirections=
+[0,1,2].filter(
+d=>d!==keeperDirection
+);
+
+shotDirection=
+otherDirections[
+Math.floor(
+Math.random()*
+otherDirections.length
+)
+];
+
+}
+
+else{
+
+shotDirection=
+keeperDirection;
+
+}
+
+}
+
+
+return{
+
+goal:isGoal,
+
+shot:shotDirection,
+
+keeper:keeperDirection
+
+};
+
+}
+
+
+/* =====================================================
+   ANIMACIÓN DEL BALÓN
+===================================================== */
+
+function animateBall(
+direction,
+callback
+){
+
+const targets=[
+28,
+50,
+72
+];
+
+const startX=50;
+
+const startBottom=22;
+
+const endX=
+targets[direction];
+
+const endBottom=61;
+
+const startTime=
+performance.now();
+
+const duration=720;
+
+
+/*
+ACTIVAR EL EFECTO
+*/
+
+ball.classList.add("shooting");
+
+
+function animation(time){
+
+let progress=
+(time-startTime)/
+duration;
+
+if(progress>1)
+progress=1;
+
+
+/*
+Aceleración y frenado
+*/
+
+const ease=
+progress<0.5
+?
+2*progress*progress
+:
+1-
+Math.pow(
+-2*progress+2,
+2
+)/2;
+
+
+/*
+Movimiento horizontal
+*/
+
+const currentX=
+startX+
+(endX-startX)*
+ease;
+
+
+/*
+Movimiento vertical
+*/
+
+const currentBottom=
+startBottom+
+(endBottom-startBottom)*
+ease;
+
+
+/*
+GIRO RÁPIDO
+*/
+
+const rotation=
+1080*ease;
+
+
+/*
+El balón se hace
+ligeramente más pequeño
+al alejarse.
+*/
+
+const scale=
+1-(ease*.43);
+
+
+ball.style.left=
+currentX+"%";
+
+ball.style.bottom=
+currentBottom+"%";
+
+ball.style.transform=
+"translateX(-50%) "+
+"rotate("+rotation+"deg) "+
+"scale("+scale+")";
+
+
+if(progress<1){
+
+requestAnimationFrame(
+animation
+);
+
+}
+
+else{
+
+setTimeout(
+callback,
+80
+);
+
+}
+
+}
+
+requestAnimationFrame(
+animation
+);
+
+}
+
+
+/* =====================================================
+   COLOMBIA PATEA
+===================================================== */
+
+function shoot(direction){
+
+if(busy)
+return;
+
+if(round%2!==0)
+return;
+
+if(round>=8)
+return;
+
+
+busy=true;
+
+round++;
+
+updateScore();
+
+message.textContent=
+"⚽ ¡DISPARO!";
+
+
+const play=
+makePlay(
+direction,
+true
+);
+
+
+moveKeeper(
+play.keeper
+);
+
+
+animateBall(
+play.shot,
+function(){
+
+if(play.goal){
+
+playerGoals++;
+
+totalGoals++;
+
+message.textContent=
+"🔥 ¡GOOOOOOL!";
+
+markPlayer(
+Math.ceil(round/2),
+"goal"
+);
+
+}
+
+else{
+
+totalSaves++;
+
+message.textContent=
+"🧤 ¡ATAJÓ "+
+matches[matchIndex].mascotName+
+"!";
+
+markPlayer(
+Math.ceil(round/2),
+"miss"
+);
+
+}
+
+updateScore();
+
+
+setTimeout(
+function(){
+
+resetPositions();
+
+busy=false;
+
+updateTurn();
+
+},
+900
+);
+
+});
+
+}
+
+
+/* =====================================================
+   COLOMBIA ATAJA
+===================================================== */
+
+function defend(direction){
+
+if(busy)
+return;
+
+if(round%2===0)
+return;
+
+if(round>=8)
+return;
+
+
+busy=true;
+
+round++;
+
+updateScore();
+
+
+const m=
+matches[matchIndex];
+
+message.textContent=
+"⚽ ¡"+
+m.mascotName+
+" PATEA!";
+
+
+const play=
+makePlay(
+direction,
+false
+);
+
+
+moveKeeper(
+play.keeper
+);
+
+
+animateBall(
+play.shot,
+function(){
+
+if(play.goal){
+
+opponentGoals++;
+
+totalGoals++;
+
+message.textContent=
+"⚽ ¡GOL DE "+
+m.mascotName+
+"!";
+
+markOpponent(
+Math.ceil(round/2),
+"goal"
+);
+
+}
+
+else{
+
+totalSaves++;
+
+message.textContent=
+"🧤 ¡ATAJASTE EL PENAL!";
+
+markOpponent(
+Math.ceil(round/2),
+"miss"
+);
+
+}
+
+updateScore();
+
+
+setTimeout(
+function(){
+
+resetPositions();
+
+busy=false;
+
+updateTurn();
+
+},
+900
+);
+
+});
+
+}
+
+
+/* =====================================================
+   MARCADOR COLOMBIA
+===================================================== */
+
+function markPlayer(
+number,
+result
+){
+
+const dot=
+document.getElementById(
+"p"+number
+);
+
+if(!dot)
+return;
+
+dot.classList.remove(
+"goal",
+"miss"
+);
+
+dot.classList.add(
+result
+);
+
+}
+
+
+/* =====================================================
+   MARCADOR RIVAL
+===================================================== */
+
+function markOpponent(
+number,
+result
+){
+
+const dot=
+document.getElementById(
+"o"+number
+);
+
+if(!dot)
+return;
+
+dot.classList.remove(
+"goal",
+"miss"
+);
+
+dot.classList.add(
+result
+);
+
+}
+
+
+/* =====================================================
+   FINAL DEL PARTIDO
+===================================================== */
+
+function finishMatch(){
+
+busy=true;
+
+const m=
+matches[matchIndex];
+
+let text;
+
+
+if(
+playerGoals>
+opponentGoals
+){
+
+text=
+"🏆 GANASTE CONTRA "+
+m.name+
+" · "+
+playerGoals+
+" - "+
+opponentGoals;
+
+}
+
+else if(
+playerGoals<
+opponentGoals
+){
+
+text=
+"😬 PERDISTE CONTRA "+
+m.name+
+" · "+
+playerGoals+
+" - "+
+opponentGoals;
+
+}
+
+else{
+
+if(Math.random()<0.5){
+
+text=
+"🏆 GANASTE CONTRA "+
+m.name+
+" EN DESEMPATE · "+
+playerGoals+
+" - "+
+opponentGoals;
+
+}
+
+else{
+
+text=
+"😬 PERDISTE CONTRA "+
+m.name+
+" EN DESEMPATE · "+
+playerGoals+
+" - "+
+opponentGoals;
+
+}
+
+}
+
+
+results.push(text);
+
+message.textContent=
+text;
+
+
+setTimeout(
+function(){
+
+matchIndex++;
+
+
+if(
+matchIndex>=
+matches.length
+){
+
+finishTournament();
+
+return;
+
+}
+
+
+round=0;
+
+playerGoals=0;
+
+opponentGoals=0;
+
+resetDots();
+
+resetPositions();
+
+updateMatch();
+
+updateScore();
+
+busy=false;
+
+updateTurn();
+
+},
+1800
+);
+
+}
+
+
+/* =====================================================
+   FINAL DEL TORNEO
+===================================================== */
+
+function finishTournament(){
+
+const screen=
+document.getElementById(
+"finalScreen"
+);
+
+screen.style.display=
+"flex";
+
+
+let wins=0;
+let losses=0;
+
+results.forEach(function(result){
+
+if(result.includes("GANASTE"))
+wins++;
+
+if(result.includes("PERDISTE"))
+losses++;
+
+});
+
+
+const icon=
+document.getElementById(
+"finalIcon"
+);
+
+const title=
+document.getElementById(
+"finalTitle"
+);
+
+const text=
+document.getElementById(
+"finalText"
+);
+
+
+if(wins>losses){
+
+icon.textContent="🏆";
+
+title.textContent=
+"🏆 ¡CAMPEÓN!";
+
+text.textContent=
+"¡Colombia ganó el torneo!";
+
+}
+
+else{
+
+icon.textContent="😢";
+
+title.textContent=
+"😢 TORNEO TERMINADO";
+
+text.textContent=
+"Colombia no pudo ganar el torneo.";
+
+}
+
+
+document.getElementById(
+"finalGames"
+).innerHTML=
+results.join(
+"<br><br>"
+);
+
+}
+
+
+/* =====================================================
+   LIMPIAR PUNTOS
+===================================================== */
+
+function resetDots(){
+
+document
+.querySelectorAll(".dot")
+.forEach(
+function(dot){
+
+dot.classList.remove(
+"goal",
+"miss"
+);
+
+}
+);
+
+}
+
+
+/* =====================================================
+   REINICIAR TODO
+===================================================== */
+
+function resetGame(){
+
+matchIndex=0;
+
+round=0;
+
+playerGoals=0;
+
+opponentGoals=0;
+
+totalGoals=0;
+
+totalSaves=0;
+
+busy=false;
+
+results=[];
+
+
+document.getElementById(
+"finalScreen"
+).style.display=
+"none";
+
+
+resetDots();
+
+resetPositions();
+
+updateMatch();
+
+updateScore();
+
+updateTurn();
+
+}
+
+
+/* =====================================================
+   INICIO
+===================================================== */
+
+updateMatch();
+
+resetPositions();
+
+updateScore();
+
+updateTurn();
+
+</script>
+
+</body>
+</html>
